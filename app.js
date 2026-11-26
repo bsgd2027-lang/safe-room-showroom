@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { OrbitControls } from './vendor/OrbitControls.js';
-import { GLTFLoader } from './vendor/GLTFLoader.js';
+import { OrbitControls } from './OrbitControls.js';
+import { GLTFLoader } from './GLTFLoader.js';
 
 const $=id=>document.getElementById(id);
 let renderer,scene,camera,controls,model,villa,roomInstance,contactShadow,mode='exterior',failed=false,ready=false;
@@ -21,7 +21,7 @@ function setMode(next){
   $('tags').replaceChildren(...s.tags.map(t=>{const el=document.createElement('span');el.textContent=t;return el;}));
   $('view-badge').textContent=mode==='scenario'?'应用场景 · 别墅地下室':mode==='interior'?'独立展台 · 内部剖开':'独立展台 · 整体视角';
   $('cutaway-label').hidden=mode!=='interior';
-  $('fallback-img').src=`assets/${mode}.png`;
+  $('fallback-img').src=`${mode}.png`;
   cutaway.forEach(o=>o.visible=mode!=='interior');
   if(model)model.visible=mode!=='scenario';
   if(villa)villa.visible=mode==='scenario';
@@ -44,7 +44,7 @@ function loadVilla(){
   if(villaPromise)return villaPromise;
   villaPromise=new Promise((resolve,reject)=>{
     const timer=setTimeout(()=>reject(new Error('Villa load timeout')),25000);
-    new GLTFLoader().load('./assets/villa-environment.glb',gltf=>{clearTimeout(timer);resolve(gltf.scene);},undefined,e=>{clearTimeout(timer);reject(e);});
+    new GLTFLoader().load('./villa-environment.glb',gltf=>{clearTimeout(timer);resolve(gltf.scene);},undefined,e=>{clearTimeout(timer);reject(e);});
   }).then(environment=>{
     villa=new THREE.Group();villa.name='VillaApplicationScenario';villa.add(environment);
     environment.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(/Location highlight/.test(o.material.name)){o.material.color.set(0xffb42d);o.material.emissive.set(0xffa01c);o.material.emissiveIntensity=.9;o.material.metalness=0;}}});
@@ -112,7 +112,7 @@ try{
   const contactCanvas=document.createElement('canvas');contactCanvas.width=contactCanvas.height=128;const contactCtx=contactCanvas.getContext('2d');const grad=contactCtx.createRadialGradient(64,64,20,64,64,63);grad.addColorStop(0,'rgba(0,0,0,.65)');grad.addColorStop(1,'rgba(0,0,0,0)');contactCtx.fillStyle=grad;contactCtx.fillRect(0,0,128,128);
   const contact=new THREE.Mesh(new THREE.PlaneGeometry(7,6),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(contactCanvas),transparent:true,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.y=-.42;scene.add(contact);contactShadow=contact;
   const timer=setTimeout(()=>{if(!ready)fallback('Model loading timed out');},25000);
-  new GLTFLoader().load('./assets/safe-room-v1.glb',gltf=>{
+  new GLTFLoader().load('./safe-room-v1.glb',gltf=>{
     clearTimeout(timer);if(failed)return;model=gltf.scene;
     const brushed=surfaceTexture('metal'),woven=surfaceTexture('fabric'),grain=surfaceTexture('wood');const tuned=new Set();
     model.traverse(o=>{
@@ -138,4 +138,5 @@ try{
   let lastFrame=0;
   renderer.setAnimationLoop(time=>{if(failed||time-lastFrame<33)return;lastFrame=time;controls.update();if(dirty||!ready){renderer.render(scene,camera);updateSceneLabels();dirty=false;}});
 }catch(error){fallback(error);}
+
 

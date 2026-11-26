@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>家庭安全屋 · 数字展厅 V1</title>
   <link rel="stylesheet" href="style.css">
-  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+  <script type="importmap">{"imports":{"three":"./three.module.js"}}</script>
 </head>
 <body>
   <header class="topbar"><a class="brand" href="./"><span class="brand-mark" aria-hidden="true">▱</span><span>家庭安全屋<span class="brand-sub">数字展厅 / CONCEPT SHOWROOM</span></span></a><div class="edition">概念探索 <span>V1.0</span></div></header>
@@ -20,7 +20,7 @@
       <div id="canvas-host"></div>
       <div class="viewer-top"><span class="view-badge" id="view-badge">独立展台 · 整体视角</span><span class="model-state" id="model-state">正在准备模型</span></div>
       <div id="loading"><span class="loader"></span><p>正在布置展厅</p><small id="progress">加载本地三维模型…</small></div>
-      <div id="fallback" hidden><img id="fallback-img" src="assets/exterior.png" alt="当前展示模式的概念预览"><div><h2>静态预览</h2><p>当前环境未能加载此三维视图，可切换其他视图或重新加载。</p><button id="retry">重新加载</button></div></div>
+      <div id="fallback" hidden><img id="fallback-img" src="exterior.png" alt="当前展示模式的概念预览"><div><h2>静态预览</h2><p>当前环境未能加载此三维视图，可切换其他视图或重新加载。</p><button id="retry">重新加载</button></div></div>
       <div class="cutaway-label" id="cutaway-label" hidden>说明性剖开 · 已隐藏正面、右侧围护和顶部组件</div>
       <div id="scenario-labels" hidden><span id="floor-upper" class="floor-label">2F <small>起居空间</small></span><span id="floor-ground" class="floor-label">1F <small>车库 · 厨房</small></span><span id="floor-basement" class="floor-label basement">B1 <small>地下室</small></span><button id="room-pin" class="room-pin" aria-label="定位地下室安全屋"><i></i><span>家庭安全屋<small>B1 · 嵌入式布置</small></span></button></div>
       <div id="scenario-note" class="scenario-note" hidden>别墅剖面示意 · 前侧围护已隐藏以展示楼层与房间位置</div>
@@ -28,6 +28,27 @@
     </section>
   </main>
   <footer><span>家庭安全屋 · 初版空间探索</span><span>外观 / 顶部设备 / 休息储物</span><span>概念模型，非施工或性能依据</span></footer>
-  <script type="module" src="app.js"></script>
+  <script>
+    function startupFallback(error) {
+      console.error('展厅启动失败:', error);
+      document.getElementById('loading').hidden = true;
+      document.getElementById('fallback').hidden = false;
+      document.getElementById('model-state').textContent = '静态预览模式';
+      document.querySelector('#fallback p').textContent = '三维程序未能启动，请检查网络后重新加载。';
+      document.getElementById('retry').onclick = function () { location.reload(); };
+    }
+    const startupTimer = setTimeout(function () {
+      startupFallback(new Error('启动等待超时'));
+    }, 30000);
+  </script>
+  <script type="module">
+    import('./app.js?v=20261126').then(function () {
+      clearTimeout(startupTimer);
+    }).catch(function (error) {
+      clearTimeout(startupTimer);
+      startupFallback(error);
+    });
+  </script>
 </body>
 </html>
+
