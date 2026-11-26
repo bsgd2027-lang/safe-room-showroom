@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>家庭安全屋 · 数字展厅 V1</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="./"><span class="brand-mark" aria-hidden="true">▱</span><span>家庭安全屋<span class="brand-sub">数字展厅 / CONCEPT SHOWROOM</span></span></a><div class="edition">概念探索 <span>V1.0</span></div></header>
+  <main>
+    <aside class="story">
+      <div><p class="eyebrow">A SPACE WITHIN HOME</p><h1>为家的安心，<br>留一处空间。</h1><p class="intro">从独立箱体到紧凑内装，探索家庭安全屋的空间构想。</p></div>
+      <div class="mode-info" aria-live="polite"><span class="section-label" id="mode-label">整体外观</span><h2 id="mode-title">简洁外壳，完整空间</h2><p id="mode-copy">银白板面、规则分缝和独立边框构成整体外观。顶部设备区与主体分开呈现。</p><div class="tags" id="tags"><span>板式外观</span><span>顶部设备区</span><span>独立箱体</span></div></div>
+      <div class="view-switch" role="group" aria-label="选择展示模式"><button id="exterior" class="active" aria-pressed="true">整体外观</button><button id="interior" aria-pressed="false">查看内部</button><button id="scenario" aria-pressed="false">应用场景</button></div>
+      <div id="scenario-actions" hidden><div class="scenario-key"><span></span>金色轮廓 · 地下室安全屋</div><button id="focus-room">定位安全屋</button><button id="overview">返回别墅全景</button></div>
+      <div class="concept-note"><span class="note-icon">i</span><p>本展厅为概念展示。比例、材质及配置仅作示意，实际产品信息待确认。</p></div>
+    </aside>
+    <section class="viewer" aria-label="安全屋交互式三维模型">
+      <div id="canvas-host"></div>
+      <div class="viewer-top"><span class="view-badge" id="view-badge">独立展台 · 整体视角</span><span class="model-state" id="model-state">正在准备模型</span></div>
+      <div id="loading"><span class="loader"></span><p>正在布置展厅</p><small id="progress">加载本地三维模型…</small></div>
+      <div id="fallback" hidden><img id="fallback-img" src="assets/exterior.png" alt="当前展示模式的概念预览"><div><h2>静态预览</h2><p>当前环境未能加载此三维视图，可切换其他视图或重新加载。</p><button id="retry">重新加载</button></div></div>
+      <div class="cutaway-label" id="cutaway-label" hidden>说明性剖开 · 已隐藏正面、右侧围护和顶部组件</div>
+      <div id="scenario-labels" hidden><span id="floor-upper" class="floor-label">2F <small>起居空间</small></span><span id="floor-ground" class="floor-label">1F <small>车库 · 厨房</small></span><span id="floor-basement" class="floor-label basement">B1 <small>地下室</small></span><button id="room-pin" class="room-pin" aria-label="定位地下室安全屋"><i></i><span>家庭安全屋<small>B1 · 嵌入式布置</small></span></button></div>
+      <div id="scenario-note" class="scenario-note" hidden>别墅剖面示意 · 前侧围护已隐藏以展示楼层与房间位置</div>
+      <div class="viewer-bottom"><p id="interaction-hint"><span class="mouse-icon" aria-hidden="true"></span>拖动旋转 <span class="divider"></span>滚轮缩放</p><div class="tools" role="group" aria-label="视图操作"><button id="rotate" aria-pressed="false" title="自动旋转">自动旋转</button><button id="zoom-in" aria-label="放大模型" title="放大">＋</button><button id="zoom-out" aria-label="缩小模型" title="缩小">−</button><button id="reset" title="复位当前视角">复位</button></div></div>
+    </section>
+  </main>
+  <footer><span>家庭安全屋 · 初版空间探索</span><span>外观 / 顶部设备 / 休息储物</span><span>概念模型，非施工或性能依据</span></footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
